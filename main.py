@@ -10,8 +10,13 @@ import asyncio
 from datetime import time
 import json
 import requests
+from GPT3 import get_GPT_response
 
-
+class MainView(discord.ui.View):
+    def __init__(self):
+        print("init")
+        super().__init__(timeout=None)
+        
 class Client(commands.Bot):
   def __init__(self):
     super().__init__(command_prefix="!" ,intents=Intents.all())
@@ -37,6 +42,7 @@ class Client(commands.Bot):
     return ret
     
   async def on_ready(self):
+    self.add_view(MainView())
     print(" Logged in as " + self.user.name)
     await self.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.playing, name="Puping Game"))
     synced = await self.tree.sync()
@@ -48,20 +54,31 @@ client = Client()
 async def chat(Interaction: discord.Interaction, text: str) -> None:    
     await Interaction.response.send_message(get_response(text, Interaction.user))
 
-@client.tree.command(name="talk", description="Talk with DialoGPT (GPT2)")
-async def talk(Interaction: discord.Interaction, text: str) -> None:
-    payload = {'inputs': {'text': text}}
-    async with Interaction.channel.typing():
-        response = client.query(payload)
-    bot_response = response.get('generated_text', None)
+# @client.tree.command(name="talk", description="Talk with DialoGPT (GPT2)")
+# async def talk(Interaction: discord.Interaction, text: str) -> None:
+#     payload = {'inputs': {'text': text}}
+#     async with Interaction.channel.typing():
+#         response = client.query(payload)
+#     bot_response = response.get('generated_text', None)
     
-    # we may get ill-formed response if the model hasn't fully loaded
-    # or has timed out
-    if not bot_response:
-        if 'error' in response:
-            bot_response = '`Error: {}`'.format(response['error'])
-        else:
-            bot_response = 'Hmm... something is not right.'
+#     # we may get ill-formed response if the model hasn't fully loaded
+#     # or has timed out
+#     if not bot_response:
+#         if 'error' in response:
+#             bot_response = '`Error: {}`'.format(response['error'])
+#         else:
+#             bot_response = 'Hmm... something is not right.'
+
+#     # send the model's response to the Discord channel
+#     chat_dialogue = f"```{Interaction.user}: {text}\nBot: {bot_response}```"
+#     await Interaction.response.send_message(chat_dialogue)
+
+@client.tree.command(name="talk", description="Talk with ChatGPT")
+async def talk(Interaction: discord.Interaction, text: str, clear: bool = False) -> None:
+
+    async with Interaction.channel.typing():
+        bot_response = get_GPT_response(message=text, IsPuping=Interaction.user == "vermillixn", clear=clear)
+    
 
     # send the model's response to the Discord channel
     chat_dialogue = f"```{Interaction.user}: {text}\nBot: {bot_response}```"
