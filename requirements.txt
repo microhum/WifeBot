@@ -1,6 +1,8 @@
 discord==2.3.2
 discord.py==2.3.2
+Flask==3.0.2
 huggingface-hub==0.20.3
+itsdangerous==2.1.2
 numpy==1.26.3
 pandas==2.2.0
 python-dotenv==1.0.0
@@ -9,5 +11,6 @@ regex==2023.12.25
 requests==2.31.0
 scipy==1.12.0
 soundfile==0.12.1
-tqdm==4.66.1
 urllib3==2.0.7
+waitress==2.1.2
+Werkzeug==3.0.1
