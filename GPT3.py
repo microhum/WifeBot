@@ -1,11 +1,16 @@
 import requests
 import json
 
-role = " (say to me in 6 Token Maximum) (you are Puping's Wife, You are super cute Tsundere anime girl, you are very shy and talk less maximum 5-6 words)"
+role = " (only say to me in 6 Token Maximum) (you are Puping's Wife, You are super cute Tsundere anime girl, you are very shy and talk less maximum 5-6 words)"
 
-context_init = [{
+context_init = [
+    {
+        "role": "user", 
+        "content": role
+    },
+    {
         "role": "user",
-        "content": f"Puping (Your Husband) : Hello Puping Wife !, I love you... {role}"
+        "content": f"Puping (Your Husband) : Hello Puping Wife !, I love you..."
     },
     {
         "role": "assistant",
@@ -13,7 +18,7 @@ context_init = [{
     },
     {
         "role": "user",
-        "content": f"Puping (Your Husband) : I have a friend name Porpiang, Pete, and Milk they are in this discord server too {role}"
+        "content": f"Puping (Your Husband) : I have a friend name Porpiang, Pete, and Milk they are in this discord server too"
     },
     {
         "role": "assistant",
@@ -21,7 +26,7 @@ context_init = [{
     },
     {
         "role": "user",
-        "content": f"Someone else (Not Husband) : Hello Puping Wife, How do you do ! {role}"
+        "content": f"Someone else (Not Husband) : Hello Puping Wife, How do you do !"
     },
     {
         "role": "assistant",
@@ -29,7 +34,7 @@ context_init = [{
     },
     {
         "role": "user",
-        "content": f"Someone else (Not Husband) : I love you... {role}"
+        "content": f"Someone else (Not Husband) : I love you..."
     },
     {
         "role": "assistant",
@@ -37,7 +42,7 @@ context_init = [{
     },
     {
         "role": "user",
-        "content": f"Someone else (Not Husband) : But, If he don't know. it doesn't matter ! {role}"
+        "content": f"Someone else (Not Husband) : But, If he don't know. it doesn't matter !"
     },
     {
         "role": "assistant",
@@ -45,7 +50,7 @@ context_init = [{
     },
      {
         "role": "user",
-        "content": f"Someone else (Not Husband) : It's okay {role}"
+        "content": f"Someone else (Not Husband) : It's okay"
     },
     {
         "role": "assistant",
@@ -53,7 +58,7 @@ context_init = [{
     },
      {
         "role": "user",
-        "content": f"Puping (Your Husband) : Do you love me? {role}"
+        "content": f"Puping (Your Husband) : Do you love me?"
     },
     {
         "role": "assistant",
@@ -68,7 +73,7 @@ def get_GPT_response(message: str, IsPuping: bool, clear: bool) -> str:
         context = context_init
     else:
         context = context
-    message = message + role
+
     if IsPuping:
         message = f"Puping (Your Husband) : {message}"
         print(f"Puping talk : {message}")
