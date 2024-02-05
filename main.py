@@ -1,7 +1,10 @@
 from typing import Final, List
+from flask import Flask
+from threading import Thread
+from waitress import serve
 from dotenv import load_dotenv
 import os
-from discord.ext import commands
+from discord.ext import commands, tasks
 import discord
 from discord import Intents, Message, app_commands, FFmpegPCMAudio, Spotify
 from responses import get_response
@@ -10,13 +13,31 @@ import asyncio
 from datetime import time
 import json
 import requests
+from itertools import cycle
 from GPT3 import get_GPT_response
 
-class MainView(discord.ui.View):
-    def __init__(self):
-        print("init")
-        super().__init__(timeout=None)
-        
+# Flask Server Keep Bot Alive
+app = Flask(__name__)
+
+@app.route("/")
+def returnHTML():
+    return "Hi, This is Wife-Bot Hosting service"
+
+def run():
+    # app.run(host="0.0.0.0", port=80)
+    serve(app, host='0.0.0.0', port=80)
+
+def keep_alive():
+    server = Thread(target=run)
+    server.start()
+    
+status = cycle(['Thinking About Puping','Miss Puping'])
+
+@tasks.loop(seconds=10)
+async def change_status(): 
+    await client.change_presence(status=discord.Status.idle, activity=discord.Streaming(name=next(status), url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"))
+
+# Declare Client(Bot) Class
 class Client(commands.Bot):
   def __init__(self):
     super().__init__(command_prefix="!" ,intents=Intents.all())
@@ -28,6 +49,7 @@ class Client(commands.Bot):
     self.request_headers = {
             'Authorization': 'Bearer {}'.format(self.HUGGINGFACE_TOKEN)
         }
+    
 
   def query(self, payload):
     """
@@ -40,11 +62,10 @@ class Client(commands.Bot):
                                 data=data)
     ret = json.loads(response.content.decode('utf-8'))
     return ret
-    
+  
   async def on_ready(self):
-    self.add_view(MainView())
     print(" Logged in as " + self.user.name)
-    await self.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.playing, name="Puping Game"))
+    change_status.start()
     synced = await self.tree.sync()
     print(" Slash CMDs Synced "+ str(len(synced)) + " Commands")
     
@@ -112,6 +133,7 @@ async def hee(Interaction: discord.Interaction) -> None:
     await join_play_sound(Interaction=Interaction, sound_data=f'{sound_path}')
     
 def main() -> None:
+    keep_alive()
     client.run(token=client.TOKEN)
 
 if __name__ == '__main__':
