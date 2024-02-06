@@ -1,0 +1,13 @@
+**Examples:**
+1. `/help`: Displays a list of all available commands.
+2. `/help ping`: Displays detailed help for the "talk" command.
+3. `/help speak`: Displays detailed help for the "speak" command.
+
+**Available Commands:**
+1. `/chat [text] `: Talk with Puping's Wife in old school way.
+2. `/talk [text] [clear: optional]`: Talk with Genative Character (GPT3) Puping's Wife.
+3. `/copy [text]`: Command bot to text the input.
+4. `/join`: Join Voice Chat
+5. `/leave`: Leave Voice Chat
+6. `/speak [text] [speaker: 0-4]`: Command bot to speak [requirement: you have to be inside voice chat before]
+7. `/hee`: (easter egg) [requirement: you have to be inside voice chat before]

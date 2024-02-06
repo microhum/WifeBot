@@ -71,7 +71,20 @@ class Client(commands.Bot):
     
 client = Client()
 
-@client.command(name="chat", description="Talking ")
+@client.tree.command(name="help", description="Command help")
+async def help(Interaction: discord.Interaction, command: str = "") -> None:
+    doc_path = f"assets/documents/help.txt"
+    try:
+        with open (doc_path, "r") as file:
+            content = ''.join(file.readlines())
+    except FileNotFoundError:
+        content = f"File '{doc_path}' not found."
+    except Exception as e:
+        content = f"An error occurred: {e}"
+
+    await Interaction.response.send_message(f"{content}", ephemeral=True)
+
+@client.tree.command(name="chat", description="Talking ")
 async def chat(Interaction: discord.Interaction, text: str) -> None:    
     await Interaction.response.send_message(get_response(text, Interaction.user))
 
@@ -97,13 +110,14 @@ async def chat(Interaction: discord.Interaction, text: str) -> None:
 @client.tree.command(name="talk", description="Talk with ChatGPT")
 async def talk(Interaction: discord.Interaction, text: str, clear: bool = False) -> None:
 
+    await Interaction.response.send_message(f"```{Interaction.user}: {text}```")
     async with Interaction.channel.typing():
         bot_response = get_GPT_response(message=text, IsPuping=Interaction.user == "vermillixn", clear=clear)
     
 
     # send the model's response to the Discord channel
     chat_dialogue = f"```{Interaction.user}: {text}\nBot: {bot_response}```"
-    await Interaction.response.send_message(chat_dialogue)
+    await Interaction.edit_original_response(content=chat_dialogue)
 
 @client.tree.command(name="copy", description="Talking ")
 async def copy(Interaction: discord.Interaction, text: str) -> None:    
