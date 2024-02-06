@@ -1,6 +1,6 @@
 **Examples:**
 1. `/help`: Displays a list of all available commands.
-2. `/help ping`: Displays detailed help for the "talk" command.
+2. `/help talk`: Displays detailed help for the "talk" command.
 3. `/help speak`: Displays detailed help for the "speak" command.
 
 **Available Commands:**
