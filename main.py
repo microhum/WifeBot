@@ -67,7 +67,7 @@ class Client(commands.Bot):
     print(" Logged in as " + self.user.name)
     change_status.start()
     try:
-        with open("asset/images/avatar.gif", "rb") as avatar:
+        with open("assets/images/avatar.gif", "rb") as avatar:
             await self.user.edit(avatar=avatar.read())
     except Exception as e:
         print(f"Error: {e}")
