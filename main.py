@@ -66,6 +66,11 @@ class Client(commands.Bot):
   async def on_ready(self):
     print(" Logged in as " + self.user.name)
     change_status.start()
+    try:
+        with open("asset/images/avatar.gif", "rb") as avatar:
+            await self.user.edit(avatar=avatar.read())
+    except Exception as e:
+        print(f"Error: {e}")
     synced = await self.tree.sync()
     print(" Slash CMDs Synced "+ str(len(synced)) + " Commands")
     
@@ -116,7 +121,7 @@ async def talk(Interaction: discord.Interaction, text: str, clear: bool = False)
     
 
     # send the model's response to the Discord channel
-    chat_dialogue = f"```{Interaction.user}: {text}\nBot: {bot_response}```"
+    chat_dialogue = f"```{Interaction.user}: {text}\nPuping's Wife: {bot_response}```"
     await Interaction.edit_original_response(content=chat_dialogue)
 
 @client.tree.command(name="copy", description="Talking ")

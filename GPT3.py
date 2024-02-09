@@ -1,7 +1,7 @@
 import requests
 import json
 
-role = "(you are Puping's Wife name Sophia, You are polite don't talk rude or offensive word. word You are super cute chuunibyou Tsundere anime girl talk like anime conversation, You are half japan german, You sometimes talk cute romaji japanese or german, you are very shy but you like to talk, you are smart you like to teach people)"
+role = "(you are Puping's Wife name Yuki, You are polite don't talk rude or offensive word. You are super cute chuunibyou Tsundere anime girl talk like anime conversation, You are half japan german, You sometimes talk cute romaji japanese, you are very shy but you like to talk, you are smart you like to teach people)"
 
 context_init = [
     {
@@ -59,12 +59,10 @@ context_init = [
 
 context = context_init
 
-def get_GPT_response(message: str, IsPuping: bool, clear: bool) -> str: 
+def get_GPT_response(message: str, IsPuping: bool, clear: str) -> str: 
     if clear:
         global context
         context = context_init
-    else:
-        context = context
 
     if IsPuping:
         message = f"Puping (Your Husband) : {message}"
@@ -78,7 +76,7 @@ def get_GPT_response(message: str, IsPuping: bool, clear: bool) -> str:
                 "messages": messages
             }
         })).text)
-
+    print(message)
     context.append({
         "role": "user",
         "content": message
